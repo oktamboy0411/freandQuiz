@@ -5,13 +5,13 @@ function Footer() {
   return (
     <div className="flex items-center flex-col justify-center gap-5 py-8 bg-bgGray">
         <div className="flex items-center justify-center gap-4">
-            <a href="https://t.me/OkTaM_bOy_0411">
+            <a href="https://t.me/OkTaM_bOy_0411" target="_blank">
                 <BsTelegram className=" text-pinkColor w-8 h-8" />
             </a>
-            <a href="">
+            <a href="https://www.facebook.com/" target="_blank">
                 <BsFacebook className=" text-pinkColor w-8 h-8"/>
             </a>
-            <a href="https://www.instagram.com/_oktam_qulsoatov_coder_0411_/?next=%2F">
+            <a href="https://www.instagram.com/_oktam_qulsoatov_coder_0411_/?next=%2F" target="_blank">
                 <RiInstagramFill className=" text-pinkColor w-9 h-9"/>
             </a>
         </div>

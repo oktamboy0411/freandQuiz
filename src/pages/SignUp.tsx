@@ -1,16 +1,29 @@
 import { useState } from "react";
-import { createUserWithEmailAndPasswordCustom } from "../utils/signUpWithEmailAndPassword";
+import { auth } from "../config/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@material-tailwind/react";
 
 function SignUp() {
+  const navigate = useNavigate()
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const signUp = () => createUserWithEmailAndPasswordCustom(email , password)
+  const signUp = async function (){
+    try {
+        const data = await createUserWithEmailAndPassword(auth , email , password);
+        console.log(data);
+        navigate("/dashboard");
+    } catch (error) {
+        console.error(error);
+        
+    }
+}
 
   return (
     <div className="container mx-auto p-8 flex">
       <div className="max-w-md w-full mx-auto">
-        <h1 className="text-4xl text-center mb-12 font-thin">buddy meter</h1>
+        <h1 className="text-4xl text-center mb-12 font-thin">Sign Up</h1>
 
         <div className="bg-white rounded-lg overflow-hidden shadow-2xl">
           <div className="p-8">
@@ -46,15 +59,15 @@ function SignUp() {
               />
             </div>
 
-            <button onClick={signUp} className="w-full p-3 mt-4 bg-indigo-600 text-white rounded shadow">
+            <Button onClick={signUp} className="w-full p-3 mt-4 bg-pinkColor text-white rounded shadow">
             Create account
-            </button>
+            </Button>
           </div>
 
           <div className="flex justify-between p-8 text-sm border-t border-gray-300 bg-gray-100">
-            <a href="#" className="font-medium text-indigo-500">
+            <Link to="/sign-in" className="font-medium text-indigo-500">
               Login
-            </a>
+            </Link>
           </div>
         </div>
       </div>
