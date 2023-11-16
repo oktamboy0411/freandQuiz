@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { signInWithEmailAndPasswordCustom } from "../utils/signInWithEmailAndPassword";
+import { Link } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState<string>("");
@@ -10,7 +11,7 @@ function Login() {
   return (
     <div className="container mx-auto p-8 flex">
       <div className="max-w-md w-full mx-auto">
-        <h1 className="text-4xl text-center mb-12 font-thin">buddy meter</h1>
+        <h1 className="text-4xl text-center mb-12 font-thin">Sign In</h1>
 
         <div className="bg-white rounded-lg overflow-hidden shadow-2xl">
           <div className="p-8">
@@ -46,15 +47,15 @@ function Login() {
               />
             </div>
 
-            <button onClick={signIn} className="w-full p-3 mt-4 bg-indigo-600 text-white rounded shadow">
+            <button onClick={signIn} className="w-full p-3 mt-4 bg-pinkColor text-white rounded shadow">
               Sign In
             </button>
           </div>
 
           <div className="flex justify-between p-8 text-sm border-t border-gray-300 bg-gray-100">
-            <a href="#" className="font-medium text-indigo-500">
+            <Link to="/sign-up" className="font-medium text-indigo-500">
               Create account
-            </a>
+            </Link>
 
             <a href="#" className="text-gray-600">
               Forgot password?
