@@ -1,13 +1,14 @@
 import { createBrowserRouter , RouterProvider } from "react-router-dom";
+
 import SignUp from '../pages/SignUp'
 import Login from '../pages/Login'
 import Home from "../pages/Home";
 import Layout from "../components/layout/Layout";
 import Error from "../pages/Error";
 import Dashboard from "../components/layout/Dashboard";
-import QuizList from "../pages/quizList";
-import CreateQuiz from "../pages/createQuiz";
-import PlayQuiz from "../pages/playQuiz";
+import QuizList from "../pages/QuizList";
+import CreateQuiz from "../pages/CreateQuiz";
+import PlayQuiz from "../pages/PlayQuiz";
 import Quiz from "../pages/Quiz";
 import Settings from "../pages/Settings";
 
