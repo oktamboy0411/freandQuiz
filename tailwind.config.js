@@ -1,4 +1,6 @@
 import withMT from "@material-tailwind/react/utils/withMT";
+import colors from "./src/units/colors"
+import boxShadow from "./src/units/boxShadow"
  
 export default withMT({
   content: [
@@ -9,14 +11,9 @@ export default withMT({
   ],
   theme: {
     extend: {
-      boxShadow: {
-        bgGrayShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-      }
+      boxShadow
     },
-    colors: {
-      bgGray: "#F1EDED",
-      pinkColor: "#F101E8"
-    }
+    colors
   },
   plugins: [],
 });

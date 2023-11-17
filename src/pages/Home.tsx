@@ -1,18 +1,13 @@
 import { Button } from "@material-tailwind/react"
 import { Link } from "react-router-dom"
+import aboutSite from "../units/aboutSite"
 
 function Home() {
   return (
     <div className="flex flex-col items-center justify-center gap-8 p-8">
       <p className=" font-bold text-2xl text-pinkColor">How well do your friends know you?</p>
       <ol>
-        <li className=" font-normal text-lg list-disc">Choose your region.</li>
-        <li className=" font-normal text-lg list-disc">Enter your name.</li>
-        <li className=" font-normal text-lg list-disc">Answer 10 Questions about yourself.</li>
-        <li className=" font-normal text-lg list-disc">Your quiz link will be created.</li>
-        <li className=" font-normal text-lg list-disc">Share your quiz link with your friends.</li>
-        <li className=" font-normal text-lg list-disc">Your friends will try to answer your questions.</li>
-        <li className=" font-normal text-lg list-disc">Check the results at your quiz link!</li>
+        {aboutSite.map(item => <li key={item} className=" font-normal text-lg list-disc">{item}</li>)}
       </ol>
       <p className=" font-bold text-2xl text-pinkColor">Get started</p>
       <div className="flex items-center justify-center gap-4">
