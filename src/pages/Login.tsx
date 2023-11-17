@@ -3,17 +3,28 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
 import { auth } from "../config/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { getDocs, query, where } from "firebase/firestore";
+import { userCollection } from "../config/collections";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../redux/reducers/userReducer";
+import { setLoader } from "../redux/reducers/loaderReducer";
 
 function Login() {
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const signIn = async function () {
     try {
+      dispatch(setLoader(true))
       const data = await signInWithEmailAndPassword(auth, email, password);
-      console.log(data);
+      const q = query(userCollection, where("userId", "==" , data.user.uid))
+      const res = await getDocs(q);
+      const userData = res.docs.map(item => item.data())
+      dispatch(updateUser(userData[0]))
       navigate("/dashboard");
+      dispatch(setLoader(false))
     } catch (error) {
       console.error(error);
     }
