@@ -1,7 +1,14 @@
+import { useEffect } from "react"
 
 function QuizList() {
+   useEffect(() => {
+     
+   }, [])
+
   return (
-    <div>QuizList</div>
+    <div>
+
+    </div>
   )
 }
 
