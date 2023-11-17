@@ -2,22 +2,22 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
 import { auth } from "../config/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth"
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 function Login() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const signIn = async function (){
+  const signIn = async function () {
     try {
-        const data = await signInWithEmailAndPassword(auth , email , password);
-        console.log(data);
-        navigate("/dashboard");
+      const data = await signInWithEmailAndPassword(auth, email, password);
+      console.log(data);
+      navigate("/dashboard");
     } catch (error) {
-        console.error(error);  
+      console.error(error);
     }
-  }
+  };
 
   return (
     <div className="container mx-auto p-8 flex">
@@ -58,7 +58,10 @@ function Login() {
               />
             </div>
 
-            <Button onClick={signIn} className="w-full p-3 mt-4 bg-pinkColor text-white rounded shadow">
+            <Button
+              onClick={signIn}
+              className="w-full p-3 mt-4 bg-pinkColor text-white rounded shadow"
+            >
               Sign In
             </Button>
           </div>

@@ -1,24 +1,32 @@
 import { useState } from "react";
 import { auth } from "../config/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth"
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
+import { addDoc } from "firebase/firestore";
+import { userCollection } from "../config/collections";
+import { userType } from "../types/userType";
 
 function SignUp() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const signUp = async function (){
+  const signUp = async function () {
     try {
-        const data = await createUserWithEmailAndPassword(auth , email , password);
-        console.log(data);
-        navigate("/dashboard");
+      const data = await createUserWithEmailAndPassword(auth, email, password);
+      const newData: userType = {
+        userId: data.user.uid,
+        userLogo: "",
+        userName: email,
+        quizes: [],
+      };
+      await addDoc(userCollection, newData);
+      navigate("/dashboard");
     } catch (error) {
-        console.error(error);
-        
+      console.error(error);
     }
-}
+  };
 
   return (
     <div className="container mx-auto p-8 flex">
@@ -59,8 +67,11 @@ function SignUp() {
               />
             </div>
 
-            <Button onClick={signUp} className="w-full p-3 mt-4 bg-pinkColor text-white rounded shadow">
-            Create account
+            <Button
+              onClick={signUp}
+              className="w-full p-3 mt-4 bg-pinkColor text-white rounded shadow"
+            >
+              Create account
             </Button>
           </div>
 
