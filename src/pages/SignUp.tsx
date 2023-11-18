@@ -8,14 +8,20 @@ import { userCollection } from "../config/collections";
 import { userType } from "../types/userType";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../redux/reducers/userReducer";
+import Modal from "../components/common/ModalAlert";
+import { setLoader } from "../redux/reducers/loaderReducer";
 
 function SignUp() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
+
+  const handleOpen = () => setOpen(prev => !prev)
 
   const signUp = async function () {
+    dispatch(setLoader(true));
     try {
       const data = await createUserWithEmailAndPassword(auth, email, password);
       const newData: userType = {
@@ -25,15 +31,21 @@ function SignUp() {
         quizes: [],
       };
       await addDoc(userCollection, newData);
-      dispatch(updateUser(newData))      
+      dispatch(updateUser(newData));
       navigate("/dashboard");
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      setEmail("")
+      setPassword("")
+      handleOpen()
     }
+    dispatch(setLoader(false));
   };
 
   return (
     <div className="container mx-auto p-8 flex">
+      <Modal {...{open ,handleOpen}} title={<>bu email oldindan ro'yxatdan o'tgan bo'lishi mumkun 
+       <br /> agar unday bo'lmasa internet tarmog'ini tekshiring</>}/>
       <div className="max-w-md w-full mx-auto">
         <h1 className="text-4xl text-center mb-12 font-thin">Sign Up</h1>
         <div className="bg-white rounded-lg overflow-hidden shadow-2xl">
@@ -61,6 +73,7 @@ function SignUp() {
                 Password
               </label>
               <input
+                id="password"
                 type="text"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

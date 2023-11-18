@@ -1,40 +1,93 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@material-tailwind/react";
+import { Alert, Button } from "@material-tailwind/react";
 import { auth } from "../config/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { getDocs, query, where } from "firebase/firestore";
 import { userCollection } from "../config/collections";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../redux/reducers/userReducer";
 import { setLoader } from "../redux/reducers/loaderReducer";
+import { IoIosEye, IoIosEyeOff } from "react-icons/io";
+import ModalAlert from "../components/common/ModalAlert";
+import ModalPrompt from "../components/common/ModalPrompt";
+import { FaCircleCheck } from "react-icons/fa6";
 
 function Login() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
+  const [openPrompt, setOpenPrompt] = useState<boolean>(false);
+  const [eye, setEye] = useState<boolean>(false);
+  const [alert, setAlert] = useState<boolean>(false);
+
+  const handleOpen = () => setOpen((prev) => !prev);
+  const handleOpenPrompt = () => setOpenPrompt((prev) => !prev);
 
   const signIn = async function () {
+    dispatch(setLoader(true));
     try {
-      dispatch(setLoader(true))
       const data = await signInWithEmailAndPassword(auth, email, password);
-      const q = query(userCollection, where("userId", "==" , data.user.uid))
+      const q = query(userCollection, where("userId", "==", data.user.uid));
       const res = await getDocs(q);
-      const userData = res.docs.map(item => item.data())
-      dispatch(updateUser(userData[0]))
+      const userData = res.docs.map((item) => item.data());
+      dispatch(updateUser(userData[0]));
       navigate("/dashboard");
-      dispatch(setLoader(false))
     } catch (error) {
       console.error(error);
+      setEmail("")
+      setPassword("")
+      handleOpen();
+    }
+    dispatch(setLoader(false));
+  };
+
+  const sendEmail = async (text: string) => {
+    try {
+      await sendPasswordResetEmail(auth, text);
+      setAlert(true)
+      setTimeout(() => setAlert(false), 3000)
+    } catch (error) {
+      console.error(error);
+      handleOpen()
     }
   };
 
   return (
     <div className="container mx-auto p-8 flex">
+      <ModalAlert
+        {...{ handleOpen, open }}
+        title={
+          <>
+            sizda email yoki passwordda xatolik bor <br /> ular to'g'ri bo'lsa internet
+            tarmog'ini tekshiring
+          </>
+        }
+      />
+      <ModalPrompt
+        open={openPrompt}
+        handleOpen={handleOpenPrompt}
+        title={<>Enter your email</>}
+        setData={sendEmail}
+      />
       <div className="max-w-md w-full mx-auto">
         <h1 className="text-4xl text-center mb-12 font-thin">Sign In</h1>
-
+        <Alert
+          open={alert}
+          icon={<FaCircleCheck className="w-6 h-6" />}
+          animate={{
+            mount: { y: 0 },
+            unmount: { y: 100 },
+          }}
+          className="rounded-none border-l-4 border-[#2ec946] bg-[#2ec946]/10 font-medium text-[#2ec946] fixed w-96 bottom-4 left-4"
+        >
+          A simple alert for showing message.
+        </Alert>
         <div className="bg-white rounded-lg overflow-hidden shadow-2xl">
           <div className="p-8">
             <div className="mb-5">
@@ -46,6 +99,7 @@ function Login() {
               </label>
 
               <input
+                id="email"
                 type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -53,7 +107,7 @@ function Login() {
               />
             </div>
 
-            <div className="mb-5">
+            <div className="mb-5 relative">
               <label
                 htmlFor="password"
                 className="block mb-2 text-sm font-medium text-gray-600"
@@ -62,11 +116,22 @@ function Login() {
               </label>
 
               <input
-                type="text"
+                id="password"
+                type={eye ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="block w-full p-3 rounded bg-gray-200 border border-transparent focus:outline-none"
               />
+              <button
+                className=" absolute right-3 bottom-3"
+                onClick={() => setEye((prev) => !prev)}
+              >
+                {eye ? (
+                  <IoIosEye className="w-7 h-7" />
+                ) : (
+                  <IoIosEyeOff className="w-7 h-7" />
+                )}
+              </button>
             </div>
 
             <Button
@@ -82,9 +147,9 @@ function Login() {
               Create account
             </Link>
 
-            <a href="#" className="text-gray-600">
+            <button onClick={handleOpenPrompt} className="text-gray-600">
               Forgot password?
-            </a>
+            </button>
           </div>
         </div>
       </div>
