@@ -11,9 +11,15 @@ const initialState : {quizes: quizType[]} = {
     reducers: {
         addQuiz: (state , action) => {
             state.quizes = [...state.quizes , action.payload]
+        },
+        newQuiz: (state , action) => {
+            state.quizes = action.payload
+        },
+        removeQuiz: (state , action) => {
+            state.quizes = state.quizes.filter(item => item.id !== action.payload)
         }
     }
  })
 
- export const { addQuiz } = quizesSlice.actions
+ export const { addQuiz , newQuiz, removeQuiz} = quizesSlice.actions
  export default quizesSlice

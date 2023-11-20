@@ -19,18 +19,20 @@ import { FaCircleCheck } from "react-icons/fa6";
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [open, setOpen] = useState<boolean>(false);
-  const [openPrompt, setOpenPrompt] = useState<boolean>(false);
-  const [eye, setEye] = useState<boolean>(false);
-  const [alert, setAlert] = useState<boolean>(false);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [open, setOpen] = useState(false);
+  const [openPrompt, setOpenPrompt] = useState(false);
+  const [eye, setEye] = useState(false);
+  const [alert, setAlert] = useState(false);
 
   const handleOpen = () => setOpen((prev) => !prev);
   const handleOpenPrompt = () => setOpenPrompt((prev) => !prev);
 
-  const signIn = async function () {
+  const signIn = async () => {
     dispatch(setLoader(true));
+
     try {
       const data = await signInWithEmailAndPassword(auth, email, password);
       const q = query(userCollection, where("userId", "==", data.user.uid));
@@ -40,32 +42,36 @@ function Login() {
       navigate("/dashboard");
     } catch (error) {
       console.error(error);
-      setEmail("")
-      setPassword("")
+      setEmail("");
+      setPassword("");
       handleOpen();
+    } finally {
+      dispatch(setLoader(false));
     }
-    dispatch(setLoader(false));
   };
 
   const sendEmail = async (text: string) => {
     try {
       await sendPasswordResetEmail(auth, text);
-      setAlert(true)
-      setTimeout(() => setAlert(false), 3000)
+      setAlert(true);
+      setTimeout(() => setAlert(false), 3000);
     } catch (error) {
       console.error(error);
-      handleOpen()
+      handleOpen();
     }
   };
+
+  const togglePasswordVisibility = () => setEye((prev) => !prev);
 
   return (
     <div className="container mx-auto p-8 flex">
       <ModalAlert
-        {...{ handleOpen, open }}
+        handleOpen={handleOpen}
+        open={open}
         title={
           <>
-            sizda email yoki passwordda xatolik bor <br /> ular to'g'ri bo'lsa internet
-            tarmog'ini tekshiring
+            sizda email yoki passwordda xatolik bor <br /> ular to'g'ri bo'lsa
+            internet tarmog'ini tekshiring
           </>
         }
       />
@@ -124,7 +130,7 @@ function Login() {
               />
               <button
                 className=" absolute right-3 bottom-3"
-                onClick={() => setEye((prev) => !prev)}
+                onClick={togglePasswordVisibility}
               >
                 {eye ? (
                   <IoIosEye className="w-7 h-7" />

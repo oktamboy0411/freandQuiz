@@ -10,18 +10,22 @@ import { useDispatch } from "react-redux";
 import { updateUser } from "../redux/reducers/userReducer";
 import Modal from "../components/common/ModalAlert";
 import { setLoader } from "../redux/reducers/loaderReducer";
+import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 
 function SignUp() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [open, setOpen] = useState<boolean>(false);
+  
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [open, setOpen] = useState(false);
+  const [eye, setEye] = useState(false);
 
-  const handleOpen = () => setOpen(prev => !prev)
+  const handleOpen = () => setOpen((prev) => !prev);
 
-  const signUp = async function () {
+  const signUp = async () => {
     dispatch(setLoader(true));
+
     try {
       const data = await createUserWithEmailAndPassword(auth, email, password);
       const newData: userType = {
@@ -35,17 +39,26 @@ function SignUp() {
       navigate("/dashboard");
     } catch (err) {
       console.error(err);
-      setEmail("")
-      setPassword("")
-      handleOpen()
+      setEmail("");
+      setPassword("");
+      handleOpen();
+    } finally {
+      dispatch(setLoader(false));
     }
-    dispatch(setLoader(false));
   };
 
   return (
     <div className="container mx-auto p-8 flex">
-      <Modal {...{open ,handleOpen}} title={<>bu email oldindan ro'yxatdan o'tgan bo'lishi mumkun 
-       <br /> agar unday bo'lmasa internet tarmog'ini tekshiring</>}/>
+      <Modal
+        open={open}
+        handleOpen={handleOpen}
+        title={
+          <>
+            bu email oldindan ro'yxatdan o'tgan bo'lishi mumkun
+            <br /> agar unday bo'lmasa internet tarmog'ini tekshiring
+          </>
+        }
+      />
       <div className="max-w-md w-full mx-auto">
         <h1 className="text-4xl text-center mb-12 font-thin">Sign Up</h1>
         <div className="bg-white rounded-lg overflow-hidden shadow-2xl">
@@ -65,7 +78,7 @@ function SignUp() {
                 className="block w-full p-3 rounded bg-gray-200 border border-transparent focus:outline-none"
               />
             </div>
-            <div className="mb-5">
+            <div className="mb-5 relative">
               <label
                 htmlFor="password"
                 className="block mb-2 text-sm font-medium text-gray-600"
@@ -74,11 +87,21 @@ function SignUp() {
               </label>
               <input
                 id="password"
-                type="text"
+                type={eye ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="block w-full p-3 rounded bg-gray-200 border border-transparent focus:outline-none"
               />
+              <button
+                className=" absolute right-3 bottom-3"
+                onClick={() => setEye((prev) => !prev)}
+              >
+                {eye ? (
+                  <IoIosEye className="w-7 h-7" />
+                ) : (
+                  <IoIosEyeOff className="w-7 h-7" />
+                )}
+              </button>
             </div>
             <Button
               onClick={signUp}

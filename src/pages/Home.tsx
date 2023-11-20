@@ -1,5 +1,5 @@
 
-import GetStarted from "../components/common/getStarted"
+import GetStarted from "../components/common/GetStarted"
 import aboutSite from "../units/aboutSite"
 
 function Home() {

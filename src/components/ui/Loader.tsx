@@ -7,7 +7,7 @@ function Loader() {
     const loader = useSelector((state: RootState) => state.loader.value)
 
   return (
-    <div className={`${loader ? "" : " hidden"} fixed w-full h-screen left-0 top-0 bg-gray-300/40 flex items-center justify-center text-white`}>
+    <div className={`${loader ? "" : " hidden"} fixed w-full h-screen left-0 top-0 bg-gray-300/40 flex items-center justify-center text-white z-50`}>
       <BarLoader width={"50%"} height={7} color={colors.pinkColor} />
     </div>
   )
