@@ -11,6 +11,7 @@ import {
 } from "../../config/collections";
 import { newQuiz } from "../../redux/reducers/quizesReducer";
 import { newFriendsAnswers } from "../../redux/reducers/friendsAnswers";
+import { setLoader } from "../../redux/reducers/loaderReducer";
 
 function Dashboard() {
   const user = useSelector((state: RootState) => state.user.userData);
@@ -18,21 +19,16 @@ function Dashboard() {
 
   useEffect(() => {
     (async () => {
+      dispatch(setLoader(true));
       try {
         const data = await getDocs(quizCollection);
         const filteredData = data.docs
           .filter((item) => user.quizes.includes(item.id))
           .map((item) => ({ ...item.data(), id: item.id }));
         dispatch(newQuiz(filteredData));
-        console.log(filteredData);
       } catch (error) {
         console.error(error);
       }
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
       try {
         const data = await getDocs(friendsAnswersCollection);
         const filteredData = data.docs.map((item) => ({
@@ -40,10 +36,10 @@ function Dashboard() {
           id: item.id,
         }));
         dispatch(newFriendsAnswers(filteredData));
-        console.log(filteredData);
       } catch (error) {
         console.error(error);
       }
+      dispatch(setLoader(false));
     })();
   }, []);
 

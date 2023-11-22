@@ -39,7 +39,7 @@ const router = createBrowserRouter([
             element: <QuizList />
           },
           {
-            path: ":id",
+            path: ":quizId",
             element: <Quiz />
           },
           {
