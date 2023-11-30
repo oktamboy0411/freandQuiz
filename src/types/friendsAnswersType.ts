@@ -1,6 +1,7 @@
 export interface friendsAnswersType{
     id?:string ,
     userName: string, 
+    userLogo: string,
     userAnswers: [
         {
             id: number,

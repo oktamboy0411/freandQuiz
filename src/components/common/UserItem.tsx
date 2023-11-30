@@ -4,20 +4,26 @@ import {
   ListItemPrefix,
   Typography,
 } from "@material-tailwind/react";
+import { friendsAnswersType } from "../../types/friendsAnswersType";
+import AvatarLogo from "../../assets/AvatarLogo";
 
-function UserItem() {
+function UserItem({ data }: { data: friendsAnswersType }) {
   return (
     <ListItem>
       <ListItemPrefix>
-        <Avatar
-          variant="circular"
-          alt="candice"
-          src="https://docs.material-tailwind.com/img/face-1.jpg"
-        />
+        {data.userLogo ? (
+          <Avatar
+            variant="circular"
+            alt="candice"
+            src="https://docs.material-tailwind.com/img/face-1.jpg"
+          />
+        ) : (
+          <AvatarLogo />
+        )}
       </ListItemPrefix>
       <div>
         <Typography variant="h6" color="blue-gray">
-          Tania Andrew
+          {data.userName}
         </Typography>
       </div>
     </ListItem>

@@ -17,7 +17,7 @@ function Quiz() {
       <p className=" text-pinkColor text-2xl font-bold">{quiz?.title}'s Quiz</p>
       <Card className="w-[800px]">
       <List>
-        <UserItem />
+        {friendsAnswers.map(item => <UserItem key={item.id} data={item}/>)}
       </List>
     </Card>
     </div>
